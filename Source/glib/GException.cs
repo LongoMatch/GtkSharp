@@ -28,9 +28,12 @@ namespace GLib {
 	{
 		IntPtr errptr;
 	
+		[DllImport (Global.GLibNativeDll, CallingConvention = CallingConvention.Cdecl)]
+		static extern IntPtr g_error_copy (IntPtr errptr);
+
 		public GException (IntPtr errptr) : base ()
 		{
-			this.errptr = errptr;
+			this.errptr = g_error_copy (errptr);
 		}
 
 		struct GError {
@@ -61,10 +64,10 @@ namespace GLib {
 		}
 
 		[DllImport (Global.GLibNativeDll, CallingConvention = CallingConvention.Cdecl)]
-		static extern void g_clear_error (ref IntPtr errptr);
+		static extern void g_error_free (IntPtr errptr);
 		~GException ()
 		{
-			g_clear_error (ref errptr);
+			g_error_free (errptr);
 		}
 	}
 }
